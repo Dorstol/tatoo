@@ -25,7 +25,7 @@ jobs:
           pip install -r requirements.txt
       - name: Check migrations
         run: | 
-          python src/manage.py makemigration
+          python src/manage.py makemigrations
           python src/manage.py migrate
           python src/manage.py check
 
