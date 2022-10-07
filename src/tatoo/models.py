@@ -1,4 +1,4 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from core.validators.ImageSizeValidator import validate_image
@@ -16,17 +16,17 @@ class BaseModel(models.Model):
         return super().save(*args, **kwargs)
 
 
-class Profile(BaseModel):
-    pass
-
-
 class Pinner(BaseModel):
-    avatar = models.ImageField(upload_to="static/avatars/", blank=True)
-    full_name = models.CharField(max_length=128)
-    username = models.CharField(max_length=32)
+    avatar = models.ImageField(upload_to="media/avatars/", blank=True)
+    full_name = models.CharField(max_length=256, blank=True)
+    username = models.CharField(max_length=32, blank=True)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.username
+        return f"{self.user.first_name} {self.user.last_name} pinner"
+
+    def save(self, *args, **kwargs):
+        super(Pinner, self).save(*args, **kwargs)
 
 
 class Board(BaseModel):

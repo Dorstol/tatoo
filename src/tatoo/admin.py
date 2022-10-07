@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from tatoo.models import Board, Comment, Image, Pin, Pinner, Profile
+from tatoo.models import Board, Comment, Image, Pin, Pinner
 
 # Register your models here.
-admin.site.register([Pinner, Profile, Board, Pin, Image, Comment])
+admin.site.register([Pinner, Board, Pin, Image, Comment])
