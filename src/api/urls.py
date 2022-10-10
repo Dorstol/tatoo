@@ -1,5 +1,7 @@
 from django.urls import include, path
-from rest_framework import routers
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions, routers
 
 from api.views import *
 
@@ -7,9 +9,25 @@ app_name = "api"
 routes = routers.DefaultRouter()
 routes.register("customers", UserViewSet)
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Tatoo API",
+        default_version="v1",
+        description="Chose and get tatoo what you like",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@snippets.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[
+        permissions.AllowAny,
+    ],
+)
+
 urlpatterns = [
     path("", include(routes.urls)),
-    path("auth/", include("rest_framework.urls")),
+    path("auth/", include("djoser.urls.jwt")),
+    path("docs/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger_docs"),
     path("pinner/<int:pk>/", PinnerAPIView.as_view(), name="pinner_detail"),
     path("pinner/update/<int:pk>/", PinnerUpdateAPIView.as_view(), name="pinner_update"),
     path("pinner/delete/<int:pk>/", PinnerDestroyAPIView.as_view(), name="pinner_delete"),

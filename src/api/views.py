@@ -1,6 +1,8 @@
 from rest_framework.generics import (ListAPIView, RetrieveAPIView,
                                      RetrieveDestroyAPIView,
                                      RetrieveUpdateAPIView)
+from rest_framework.permissions import (IsAdminUser, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import *
@@ -35,19 +37,19 @@ class BoardrApi:
 
 
 class BoardListAPIView(BoardrApi, ListAPIView):
-    pass
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class BoardDetailAPIView(BoardrApi, RetrieveAPIView):
-    pass
+    permission_classes = [IsAuthenticated]
 
 
 class BoardUpdateAPIView(BoardrApi, RetrieveUpdateAPIView):
-    pass
+    permission_classes = [IsAdminUser]
 
 
 class BoardDestroyAPIView(BoardrApi, RetrieveDestroyAPIView):
-    pass
+    permission_classes = [IsAdminUser]
 
 
 class PinApi:
