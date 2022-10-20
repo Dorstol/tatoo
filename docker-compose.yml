@@ -13,6 +13,8 @@ services:
       - ./src:/tatoo/src
     env_file:
       - .env
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:12
@@ -26,6 +28,21 @@ services:
     env_file:
       - .env
 
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5000:80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+
 volumes:
   local_postgres_data: { }
   local_postgres_data_backups: { }
+  pgadmin_data: { }
