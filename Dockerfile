@@ -8,7 +8,9 @@ WORKDIR /tatoo
 RUN mkdir /commands
 
 
-COPY ./commands requirements.txt ./
+COPY ./commands ./commands
+
+COPY requirements.txt ./requirements.txt
 
 RUN python -m pip install --upgrade pip \
     pip install -r ./requirements.txt
