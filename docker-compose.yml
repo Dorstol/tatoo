@@ -6,11 +6,13 @@ services:
     container_name: tatoo_container
     working_dir: /tatoo
     command:
-      - ./commands/start_server.sh
+      - ./commands/start_server_${MODE}.sh
     ports:
-      - 8010:8008
+      - ${LOCAL_PORT}:${WSGI_PORT}
     volumes:
       - ./src:/tatoo/src
+      - static_content:/tatoo/src/static
+      - media_content:/tatoo/src/media
     env_file:
       - .env
     depends_on:
@@ -41,26 +43,50 @@ services:
     depends_on:
       - postgres
 
-  mongo:
-    image: mongo
-    container_name: mongo
-    restart: always
-    env_file: .env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
-      - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
-      - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
-    volumes:
-      - ${PWD}/_data/mongo:/data/db
-      - ${PWD}/docker/_mongo/fixtures:/import
-      - ${PWD}/docker/_mongo/scripts/init.sh:/docker-entrypoint-initdb.d/setup.sh
+  mongodb:
+    image: mongo:3-stretch
+    container_name: mongo_db_container
     ports:
       - 27017:27017
+    command: [ "--bind_ip_all", "--smallfiles" ]
+    volumes:
+      - mongo_data:/data/db
+    env_file:
+      - .env
+    restart: always
+
+  mongoadmin:
+    image: mongo-express
+    restart: always
+    container_name: mongo_admin_container
+    ports:
+      - 8091:8081
+    env_file:
+      - .env
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+
+  nginx:
+    image: nginx:1.19
+    volumes:
+      - static_content:/tatoo/src/static
+      - media_content:/tatoo/src/media
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+      - 443:443
+    env_file:
+      - .env
+    depends_on:
+      - backend
 
 
 volumes:
+  mongo_data: { }
   local_postgres_data: { }
   local_postgres_data_backups: { }
   pgadmin_data: { }
+  static_content: { }
+  media_content: { }

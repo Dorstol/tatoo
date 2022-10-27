@@ -22,5 +22,6 @@ urlpatterns = [
     path("", include("core.urls")),
     path("admin/", admin.site.urls),
     path("api/", include("api.urls")),
+    path("mongo/", include("mongo_db.urls")),
     path("api-auth/", include("rest_framework.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

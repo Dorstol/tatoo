@@ -5,6 +5,8 @@ print(CURRENT_ENV)
 
 DEBUG = True
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static/")]
+
 if os.environ.get("GITHUB_WORKFLOW"):
     DATABASES = {
         "default": {
@@ -25,8 +27,8 @@ else:
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": os.environ.get("POSTGRES_DB"),
-            "USER": os.environ.get("POSTGRES_USER"),
-            "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+            "USER": 'admin',
+            "PASSWORD": 'admin',
             "HOST": os.environ.get("POSTGRES_HOST"),
             "PORT": os.environ.get("POSTGRES_PORT"),
         },
@@ -35,7 +37,7 @@ else:
             "NAME": os.environ.get('MONGO_DB_NAME'),
             "CLIENT": {
                 "host": os.environ.get('MONGO_DB_HOST'),
-                "port": int(os.environ.get('MONGO_DB_PORT')),
+                "port": os.environ.get('MONGO_DB_PORT'),
                 "username": os.environ.get('MONGO_DB_USERNAME'),
                 "password": os.environ.get('MONGO_DB_PASSWORD'),
             },
