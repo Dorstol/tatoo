@@ -1,8 +1,10 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 from accounts.managers import CustomerManager
 
@@ -12,8 +14,9 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_("first name"), max_length=156, blank=True)
     last_name = models.CharField(_("last name"), max_length=156, blank=True)
     birthdate = models.DateField(_("birthday"), null=True, blank=True)
-    grade = models.CharField(max_length=512)
-    progress = models.PositiveSmallIntegerField(default=0)
+    is_tattoo_master = models.BooleanField(default=False, blank=True)
+    phone = PhoneNumberField(_("Phone number"), null=True, blank=True,
+                             validators=[RegexValidator(r'^\d{3}-\d{3}-\d{4}$')])
 
     is_staff = models.BooleanField(
         _("staff status"),

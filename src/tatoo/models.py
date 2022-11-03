@@ -18,9 +18,9 @@ class BaseModel(models.Model):
 
 class Pinner(BaseModel):
     avatar = models.ImageField(upload_to="media/avatars/", blank=True)
-    full_name = models.CharField(max_length=256, blank=True)
     username = models.CharField(max_length=32, blank=True)
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    about = models.CharField(max_length=512, blank=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} pinner"
@@ -34,17 +34,19 @@ class Board(BaseModel):
 
     name = models.CharField(max_length=32)
     pins_count = models.IntegerField()
-    pinner = models.ForeignKey(Pinner, on_delete=models.CASCADE)
+    pinner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
 
 
 class Pin(BaseModel):
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=255, blank=True)
     like_count = models.IntegerField(blank=True)
     title = models.CharField(max_length=128, blank=True)
+    price = models.PositiveIntegerField(default=0, blank=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title
@@ -57,7 +59,7 @@ class Image(BaseModel):
 
 class Comment(BaseModel):
     pin = models.ForeignKey(Pin, on_delete=models.CASCADE, related_name="comments")
-    user = models.ForeignKey(Pinner, on_delete=models.CASCADE, related_name="all_comments")
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="all_comments")
     text = models.CharField(max_length=250)
 
     def __str__(self):

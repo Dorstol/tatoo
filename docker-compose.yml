@@ -82,6 +82,56 @@ services:
     depends_on:
       - backend
 
+  celery:
+    build: ./
+    command:
+      - ./commands/start_celery.sh
+    restart: always
+    volumes:
+      - ./src:/tatoo
+      - ./commands:/tatoo/commands
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - backend
+
+  redis:
+    image: redis
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - backend
+#  celerybeat:
+
+  celery-flower:
+    build: ./
+    restart: always
+    command: celery -A config flower --broker=redis://redis
+    ports:
+      - 5566:5555
+    env_file:
+      - .env
+    volumes:
+      - ./src:/tatoo
+    links:
+      - backend
+      - redis
+    depends_on:
+      - celery
+      - redis
+      - backend
+
+  redisadmin:
+    container_name: redisadmin
+    image: rediscommander/redis-commander:latest
+    hostname: redisadmin
+    restart: always
+    ports:
+      - 8092:8081
+    env_file:
+      - .env
 
 volumes:
   mongo_data: { }

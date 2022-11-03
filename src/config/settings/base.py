@@ -47,11 +47,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "phonenumber_field",
     "rest_framework",
     "django_extensions",
-    "accounts.apps.AccountsConfig",
-    "core.apps.CoreConfig",
-    "tatoo.apps.TattoConfig",
+    "accounts",
+    "core",
+    "tatoo",
     "api",
     "drf_yasg",
 ]
@@ -151,3 +152,11 @@ DJOSER = {
     "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
     "PASSWORD_RESET_CONFIRM_URL": "auth/password-reset/{uid}/{token}",
 }
+
+
+CELERY_BROKER_URL = "redis://redis"
+CELERY_RESULT_BACKEND = "redis://redis"
+
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
