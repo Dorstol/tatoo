@@ -1,18 +1,12 @@
 import random
-import time
 
 from celery import shared_task
 from django.contrib.auth import get_user_model
 from faker import Faker
 
-from tatoo.models import Board, Pin, Image
+from tatoo.models import Board, Image, Pin
 
 fake = Faker()
-
-
-@shared_task
-def mine_bitcoin():
-    time.sleep(random.randint(1, 10))
 
 
 @shared_task
@@ -33,14 +27,10 @@ def generate_data():
         first_name=fake.word().title(),
         last_name=fake.word().title(),
         password=fake.password(),
-        phone=fake.phone_number()
+        phone=fake.phone_number(),
     )
 
-    board = Board.objects.create(
-        name=fake.name(),
-        pins_count=random.randint(1, 10),
-        pinner=user
-    )
+    board = Board.objects.create(name=fake.name(), pins_count=random.randint(1, 10), pinner=user)
     for i in range(10):
         pin = Pin.objects.create(
             board=board,
@@ -48,10 +38,7 @@ def generate_data():
             like_count=random.randint(1, 100),
             title=fake.text(max_nb_chars=20),
             price=random.randint(25, 500),
-            user=user
+            user=user,
         )
 
-        img = Image.objects.create(
-            pin=pin,
-            image='452b9b18c9bcd1ed27a4d576cc393e17.jpg'
-        )
+        Image.objects.create(pin=pin, image="452b9b18c9bcd1ed27a4d576cc393e17.jpg")

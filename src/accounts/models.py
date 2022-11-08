@@ -15,8 +15,9 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_("last name"), max_length=156, blank=True)
     birthdate = models.DateField(_("birthday"), null=True, blank=True)
     is_tattoo_master = models.BooleanField(default=False, blank=True)
-    phone = PhoneNumberField(_("Phone number"), null=True, blank=True,
-                             validators=[RegexValidator(r'^\d{3}-\d{3}-\d{4}$')])
+    phone = PhoneNumberField(
+        _("Phone number"), null=True, blank=True, validators=[RegexValidator(r"^\d{3}-\d{3}-\d{4}$")]
+    )
 
     is_staff = models.BooleanField(
         _("staff status"),

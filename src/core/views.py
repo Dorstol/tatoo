@@ -1,11 +1,10 @@
-from django.views.generic import ListView
-from django.views.generic import TemplateView
+from django.views.generic import ListView, TemplateView
 
 from tatoo.models import Pin
 
 
 class IndexView(TemplateView):
-    template_name = 'base/index.html'
+    template_name = "base/index.html"
 
 
 class Explore(ListView):

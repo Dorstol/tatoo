@@ -27,24 +27,24 @@ else:
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": os.environ.get("POSTGRES_DB"),
-            "USER": 'admin',
-            "PASSWORD": 'admin',
+            "USER": "admin",
+            "PASSWORD": "admin",
             "HOST": os.environ.get("POSTGRES_HOST"),
             "PORT": os.environ.get("POSTGRES_PORT"),
         },
         "non-rel": {
             "ENGINE": "djongo",
-            "NAME": os.environ.get('MONGO_DB_NAME'),
+            "NAME": os.environ.get("MONGO_DB_NAME"),
             "CLIENT": {
-                "host": os.environ.get('MONGO_DB_HOST'),
-                "port": os.environ.get('MONGO_DB_PORT'),
-                "username": os.environ.get('MONGO_DB_USERNAME'),
-                "password": os.environ.get('MONGO_DB_PASSWORD'),
+                "host": os.environ.get("MONGO_DB_HOST"),
+                "port": os.environ.get("MONGO_DB_PORT"),
+                "username": os.environ.get("MONGO_DB_USERNAME"),
+                "password": os.environ.get("MONGO_DB_PASSWORD"),
             },
-            'TEST': {
-                'MIRROR': 'default',
+            "TEST": {
+                "MIRROR": "default",
             },
-        }
+        },
     }
 
 ALLOWED_HOSTS = []

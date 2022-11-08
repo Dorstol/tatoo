@@ -2,7 +2,6 @@ from django.urls import path
 
 from mongo_db.views import all_entries, create_in_mongo
 
-
 app_name = "mongo"
 
 urlpatterns = [
