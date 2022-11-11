@@ -1,10 +1,10 @@
 from django.urls import path
 
-from core.views import Explore, IndexView
+from core.views import normalize_email, get_data
 
 app_name = "core"
 
 urlpatterns = [
-    path("", IndexView.as_view(), name="index_page"),
-    path("explore/", Explore.as_view(), name="explore"),
+    path("normalize_email/", normalize_email, name="normalize_email"),
+    path("data/", get_data, name="get_data"),
 ]

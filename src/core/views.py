@@ -1,12 +1,13 @@
-from django.views.generic import ListView, TemplateView
+from django.http import HttpResponse
 
-from tatoo.models import Pin
-
-
-class IndexView(TemplateView):
-    template_name = "base/index.html"
+from core.tasks import normalize_email_task, generate_data
 
 
-class Explore(ListView):
-    queryset = Pin.objects.all()
-    template_name = "explore.html"
+def normalize_email(request):
+    normalize_email_task.delay(filter={"email__endswith": ".com"})
+    return HttpResponse("Task is started")
+
+
+def get_data(request):
+    generate_data.delay()
+    return HttpResponse("Task is started")

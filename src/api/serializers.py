@@ -31,10 +31,10 @@ class PinSerializer(ModelSerializer):
 class ImageSerializer(ModelSerializer):
     class Meta:
         model = Image
-        fields = ("pin", "image")
+        fields = ("pins", "image")
 
 
 class CommentSerializer(ModelSerializer):
     class Meta:
         model = Comment
-        fields = ("pin", "user", "text")
+        fields = ("pins", "user", "text")

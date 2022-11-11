@@ -31,6 +31,7 @@ def generate_data():
     )
 
     board = Board.objects.create(name=fake.name(), pins_count=random.randint(1, 10), pinner=user)
+
     for i in range(10):
         pin = Pin.objects.create(
             board=board,
@@ -39,6 +40,5 @@ def generate_data():
             title=fake.text(max_nb_chars=20),
             price=random.randint(25, 500),
             user=user,
+            img=Image.objects.create(image="static/images/452b9b18c9bcd1ed27a4d576cc393e17_rF6ls3u.jpg")
         )
-
-        Image.objects.create(pin=pin, image="452b9b18c9bcd1ed27a4d576cc393e17.jpg")

@@ -47,13 +47,13 @@ class Pin(BaseModel):
     title = models.CharField(max_length=128, blank=True)
     price = models.PositiveIntegerField(default=0, blank=True)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
+    img = models.ForeignKey('Image', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.title
 
 
 class Image(BaseModel):
-    pin = models.ForeignKey(Pin, related_name="images", on_delete=models.CASCADE)
     image = models.ImageField(upload_to="static/images/", validators=[validate_image])
 
 

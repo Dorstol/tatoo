@@ -1,10 +1,11 @@
 from django.urls import path
 
-from tatoo.views import *
+from tatoo.views import Explore, IndexView, Pin_detail
 
 app_name = "tatoo"
 
 urlpatterns = [
-    path("normalize_email/", normalize_email, name="normalize_email"),
-    path("data/", get_data, name="get_data"),
+    path("", IndexView.as_view(), name="index_page"),
+    path("explore/", Explore.as_view(), name="explore"),
+    path("pin/<int:pk>", Pin_detail.as_view(), name="pin_detail")
 ]
