@@ -6,13 +6,15 @@
 {% endblock %}
 
 {% block content %}
-
-<div id="masonry">
+<main class="ms-3 me-3">
+    <div id="masonry">
     {% for pin in pins %}
-    <a class="m-2" href="{% url 'tatoo:pin_detail' pin.id %}">
-        <img class="shadow p-3 mb-5 bg-white rounded" height="350"  src="{{ pin.img.image.url }}">
-    </a>
+        <a class="m-2" href="{% url 'tatoo:pin_detail' pin.id %}">
+            <img class="shadow p-3 mb-5 bg-white rounded" height="350"  src="{{ pin.img.image.url }}">
+        </a>
     {% endfor %}
-</div>
+    </div>
+</main>
+
 
 {% endblock %}

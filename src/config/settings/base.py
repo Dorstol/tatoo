@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "tatoo",
     "api",
     "drf_yasg",
+    "crispy_forms"
 ]
 
 MIDDLEWARE = [

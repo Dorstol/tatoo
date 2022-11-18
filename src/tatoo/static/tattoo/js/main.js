@@ -1,4 +1,3 @@
-// show/close board Modal
 const createBoardBtn = document.querySelector("#createBoardBtn");
 const modal = document.querySelector("#simpleModal");
 

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% block content %}
 <div class="col-md-1"></div>
 <div class="col-md-10 text-center">
@@ -12,7 +12,7 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownUser1">
             <li><a id="createBoardBtn" class="dropdown-item" href="#">Create Board</a></li>
-            <li><a class="dropdown-item" href="{% url 'pins:create_pin' %}">Create Pin</a></li>
+            <li><a class="dropdown-item" href="">Create Pin</a></li>
         </ul>
     </div>
     {% endif %}
@@ -32,7 +32,7 @@
     <!-- edit profile and share btn -->
     <div class="mt-3">
         <a href="#" class="main-btn btn ps-3 pt-2 pb-2 pe-3 text-black ms-1"><b>Share</b></a>
-        <a href="{% url 'accounts:edit_profile' %}" class="main-btn btn ps-3 pt-2 pb-2 pe-3 text-black ms-1"><b>Edit Profile</b></a>
+        <a href="" class="main-btn btn ps-3 pt-2 pb-2 pe-3 text-black ms-1"><b>Edit Profile</b></a>
     </div>
     {% elif is_following %}
     <div class="mt-3">
@@ -71,10 +71,10 @@
             <b>Saved</b>
         </a>
         {% else %}
-        <a href="{% url 'pins:created_pins' user.username %}" class="btn-select-border text-decoration-none ps-3 pt-2 pb-2 pe-3 text-black ms-1">
+        <a href="" class="btn-select-border text-decoration-none ps-3 pt-2 pb-2 pe-3 text-black ms-1">
             <b>Created</b>
         </a>
-        <a href="{% url 'accounts:profile' user.username %}" class="btn ps-3 pt-2 pb-2 pe-3 text-black ms-1">
+        <a href="" class="btn ps-3 pt-2 pb-2 pe-3 text-black ms-1">
             <b>Saved</b>
         </a>
         {% endif %}
@@ -84,7 +84,7 @@
         <div class="modal-content ps-5 pb-5 pe-5">
             <h3 class="mt-4 mb-3"><b>Create Board</b></h3>
             <div class="row">
-                <form method="post" action="{% url 'boards:create_board' %}">
+                <form method="post" action="">
                     {% csrf_token %}
                     <label style="float: left;" for="">Name</label>
                     {{ create_board_form.title }}                        
