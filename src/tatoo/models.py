@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from core.validators.ImageSizeValidator import validate_image
 
@@ -17,13 +18,13 @@ class BaseModel(models.Model):
 
 
 class Pinner(BaseModel):
+    first_name = models.CharField(_("first name"), max_length=156, blank=True)
+    last_name = models.CharField(_("last name"), max_length=156, blank=True)
+    birthdate = models.DateField(_("birthday"), null=True, blank=True)
     avatar = models.ImageField(upload_to="media/avatars/", blank=True)
     username = models.CharField(max_length=32, blank=True)
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     about = models.CharField(max_length=512, blank=True)
-
-    def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name} pinner"
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name="profile")
 
     def save(self, *args, **kwargs):
         super(Pinner, self).save(*args, **kwargs)

@@ -30,11 +30,11 @@ else:
         },
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("POSTGRES_DB"),
+            "NAME": "tatoo",
             "USER": "admin",
             "PASSWORD": "admin",
-            "HOST": os.environ.get("POSTGRES_HOST"),
-            "PORT": os.environ.get("POSTGRES_PORT"),
+            "HOST": "postgres",
+            "PORT": "5432",
         },
         "non-rel": {
             "ENGINE": "djongo",

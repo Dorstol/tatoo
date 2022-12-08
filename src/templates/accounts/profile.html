@@ -1,7 +1,7 @@
 {% extends "base/base.html" %}
 {% block content %}
-<div class="col-md-1"></div>
-<div class="col-md-10 text-center">
+<main class="profile-page">
+    <div class="col-md-10 text-center">
     {% if request.user == user %}
     <!-- plus icon | create board and pins dropdown menu -->
     <div class="dropdown">
@@ -18,21 +18,26 @@
     {% endif %}
     <!-- user public information -->
     <!-- user photo -->
-    <img style="object-fit: cover;" width="150" height="150" class="rounded-circle" src="{{ user.profile.photo.url }}" alt="">
+    {% if user.profile.avatar %}
+        <img style="object-fit: cover;" width="150" height="150" class="rounded-circle" src="{{ user.profile.avatar.url }}" alt="">
+    {% else %}
+        <img style="object-fit: cover;" width="150" height="150" class="rounded-circle" src="../../tatoo/static/tattoo/images/default_icon.png" alt="">
+    {% endif %}
     <!-- Username or first and last name -->
-    <h1 class="text-black"><b>{% if user.profile.fname %}{{ user.profile.fname }} {{ user.profile.lname }}{% else %}{{ user.username }}{% endif %}</b></h1>
+    <h1 class="text-black"><b>{% if user.profile.first_name %}{{ user.profile.first_name }} {{ user.profile.last_name }}{% else %}{{ user.profile.username }}{% endif %}</b></h1>
     <!-- username and pronouns -->
-    <p class="text-muted">@{{ user.username }} . {{ user.profile.pronouns }}</p>
-    <!-- website link and about -->
-    <p><b><a class="text-black text-decoration-none" href="http://{{user.profile.website}}">{{ user.profile.website }}</a></b> . {{ user.profile.about }}</p>
+    <p class="text-muted">{{ user.email }} - {% if user.is_tattoo_master %} Tattoo Master ✔ {% else %} Customer {% endif %}</p>
+    <!-- birthdate and about -->
+    <p><b><a class="text-black text-decoration-none" href=""></a></b>{{ user.profile.birthdate }}</p>
+    <p><b><a class="text-black text-decoration-none" href=""></a></b>{{ user.profile.about }}</p>
     <!-- following and followers count -->
-    <span><b>{{ user.following.count }} followers</b></span> .
-    <span><b>{{ user.followers.count }} following</b></span>
+    <span><b>followers : </b></span>
+    <span><b>following : </b></span>
     {% if request.user == user %}
     <!-- edit profile and share btn -->
     <div class="mt-3">
         <a href="#" class="main-btn btn ps-3 pt-2 pb-2 pe-3 text-black ms-1"><b>Share</b></a>
-        <a href="" class="main-btn btn ps-3 pt-2 pb-2 pe-3 text-black ms-1"><b>Edit Profile</b></a>
+        <a href="{% url 'tatoo:edit_profile' user.pk %}" class="main-btn btn ps-3 pt-2 pb-2 pe-3 text-black ms-1"><b>Edit Profile</b></a>
     </div>
     {% elif is_following %}
     <div class="mt-3">
@@ -52,7 +57,7 @@
         </a>
         <a href="#">
             <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="gUZ pBj U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img">
-                <path 
+                <path
                     d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"
                     fill="#111111"
                     stroke-width="0px">
@@ -63,39 +68,37 @@
     {% endif %}
     <!-- saved and created tab -->
     <div class="mt-5 mb-5">
-        {% if '/_saved/' in request.get_full_path  %}
-        <a href="{% url 'pins:created_pins' user.username %}" class="btn ps-3 pt-2 pb-2 pe-3 text-black ms-1">
-            <b>Created</b>
-        </a>
-        <a href="{% url 'accounts:profile' user.username %}" class="btn-select-border text-decoration-none ps-3 pt-2 pb-2 pe-3 text-black ms-1">
-            <b>Saved</b>
-        </a>
-        {% else %}
         <a href="" class="btn-select-border text-decoration-none ps-3 pt-2 pb-2 pe-3 text-black ms-1">
             <b>Created</b>
         </a>
         <a href="" class="btn ps-3 pt-2 pb-2 pe-3 text-black ms-1">
             <b>Saved</b>
         </a>
-        {% endif %}
     </div>
     <!-- create board modal -->
     <div id="simpleModal" class="modal">
         <div class="modal-content ps-5 pb-5 pe-5">
             <h3 class="mt-4 mb-3"><b>Create Board</b></h3>
             <div class="row">
-                <form method="post" action="">
+                <form method="post" action="{% url 'tatoo:create_board' %}">
                     {% csrf_token %}
-                    <label style="float: left;" for="">Name</label>
-                    {{ create_board_form.title }}                        
-                    <div class="col-md-1 mt-4">    
-                        {{ create_board_form.is_private }}                        
-                    </div>
+                    <label>
+                        Name {{ create_board_form.name }}
+                    </label>
+                    <label>
+                        {{ create_board_form.pins_count }}
+                        <input value="0" name="pins_count">
+                    </label>
+                    <label>
+                        {{ create_board_form.pinner }}
+                        <input value="{{ user.pk }}" name="userId">
+                    </label>
+
                     <div style="text-align:left" class="col-md-11">
                         <b class="ms-1">Keep this board secret</b>
                         <p class="text-muted ms-4">So only you and collaborators can see it. Learm more</p>
                     </div>
-                    <input class="modal-red-btn btn text-white mt-3" type="submit" value="create">
+                    <input class="modal-red-btn btn text-white mt-3" type="submit" value="Create">
                 </form>
             </div>
         </div>
@@ -112,7 +115,7 @@
                             <img style="object-fit: cover; border-radius: 20px;" height="200" width="200" src="{{ board.cover.url }}">
                             <h4 class="mt-2 text-black" style="float: left;"><b>{{ board.title }}</b></h4>
                         </a>
-                    </div>  
+                    </div>
                 {% endif %}
                 {% elif request.user == user %}
                     <div class="col-md-2 ms-2 me-4 mb-2">
@@ -126,7 +129,7 @@
                                 <path d="m13.386 6.018 4.596 4.596L7.097 21.499 1 22.999l1.501-6.096L13.386 6.018zm8.662-4.066a3.248 3.248 0 0 1 0 4.596l-2.298 2.3-4.596-4.598 2.298-2.299a3.248 3.248 0 0 1 4.596 0z"></path>
                             </svg>
                         </a>
-                    </div>  
+                    </div>
                 {% endif %}
         {% endfor %}
     </div>
@@ -149,4 +152,5 @@
     </div>
     {% endif %}
 </div>
+</main>
 {% endblock %}

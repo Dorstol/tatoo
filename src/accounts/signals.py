@@ -11,7 +11,7 @@ User = get_user_model()
 @receiver(post_save, sender=User)
 def create_user_pinner(sender, instance, created, **kwargs):
     try:
-        instance.pinner.save()
+        instance.profile.save()
     except ObjectDoesNotExist:
         Pinner.objects.create(
             user=instance,

@@ -11,13 +11,9 @@ from accounts.managers import CustomerManager
 
 class Customer(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
-    first_name = models.CharField(_("first name"), max_length=156, blank=True)
-    last_name = models.CharField(_("last name"), max_length=156, blank=True)
-    birthdate = models.DateField(_("birthday"), null=True, blank=True)
     is_tattoo_master = models.BooleanField(default=False, blank=True)
     phone = PhoneNumberField(
-        _("Phone number"), null=True, blank=True, validators=[RegexValidator(r"^\d{3}-\d{3}-\d{4}$")]
-    )
+        _("Phone number"), null=True, blank=True,)
 
     is_staff = models.BooleanField(
         _("staff status"),
@@ -32,8 +28,6 @@ class Customer(AbstractBaseUser, PermissionsMixin):
             "Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."
         ),
     )
-
-    photo = models.ImageField(upload_to="users_photo/", null=True, blank=True)
 
     objects = CustomerManager()
     USERNAME_FIELD = "email"

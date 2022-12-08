@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.forms import ModelForm
+
+from tatoo.models import Board
 
 
 class RegisterForm(UserCreationForm):
@@ -10,8 +12,12 @@ class RegisterForm(UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
-    username = UsernameField(label=_("Input your phone"))
-
     class Meta:
         model = get_user_model()
-        fields = ("phone", "password")
+        fields = ("email", "password")
+
+
+class CreateBoardForm(ModelForm):
+    class Meta:
+        model = Board
+        fields = ['name']

@@ -50,7 +50,7 @@
                           fill="#767676" stroke-width="0px"></path>
                 </svg>
             </div>
-            <a href="">
+            <a href="{% url 'tatoo:profile' %}">
                 <img src="{% static 'tattoo/images/default_icon.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">
             </a>
             <div class="dropdown text-end">
@@ -63,10 +63,18 @@
                               fill="#767676" stroke-width="0px"></path>
                     </svg>
                 </a>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="">Settings</a></li>
-                    <li><a class="dropdown-item" href="">Sign out</a></li>
-                </ul>
+                {% if user.is_authenticated %}
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="">{{ user.email }}</a></li>
+                        <li><a class="dropdown-item" href="">Settings</a></li>
+                        <li><a class="dropdown-item" href="{% url 'tatoo:logout' %}">Sign out</a></li>
+                    </ul>
+                {% else %}
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="{% url 'tatoo:login' %}">Sign in</a></li>
+                        <li><a class="dropdown-item" href="{% url 'tatoo:register' %}">Registration</a></li>
+                    </ul>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -75,7 +83,7 @@
 
     <div class="main-page">
         <div class="main-page__hero">
-            <h1 class="main-page__title">TATTOODO</h1>
+            <h1 class="main-page__title">Artcore</h1>
             <h2 class="main-page__subtitle">FIND THE RIGHT ARTIST FOR YOUR NEXT TATTOO</h2>
             <p class="main-page__description">
                 Because getting a tattoo should be a great experience. We work with only the best tattoo studios, and
