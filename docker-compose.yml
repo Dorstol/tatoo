@@ -1,0 +1,116 @@
+version: "3"
+
+services:
+  backend:
+    build: ./
+    container_name: tatoo_container
+    working_dir: /tatoo
+    command:
+      - ./commands/start_server_${MODE}.sh
+    ports:
+      - ${LOCAL_PORT}:${WSGI_PORT}
+    volumes:
+      - ./src:/tatoo/src
+      - static_content:/tatoo/src/static
+      - media_content:/tatoo/src/media
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12
+    ports:
+      - 5432:5432
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+      - local_postgres_data_backups:/backups
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - .env
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5000:80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  nginx:
+    image: nginx:1.19
+    volumes:
+      - static_content:/tatoo/src/static
+      - media_content:/tatoo/src/media
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+      - 443:443
+    env_file:
+      - .env
+    depends_on:
+      - backend
+
+  celery:
+    build: ./
+    command:
+      - ./commands/start_celery.sh
+    restart: always
+    volumes:
+      - ./src:/tatoo
+      - ./commands:/tatoo/commands
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - backend
+
+  redis:
+    image: redis
+    env_file:
+      - .env
+    restart: on-failure
+    depends_on:
+      - backend
+
+  celery-flower:
+    build: ./
+    restart: always
+    command: celery -A config flower --broker=redis://redis
+    ports:
+      - 5566:5555
+    env_file:
+      - .env
+    volumes:
+      - ./src:/tatoo
+    links:
+      - backend
+      - redis
+    depends_on:
+      - celery
+      - redis
+      - backend
+
+  redisadmin:
+    container_name: redisadmin
+    image: rediscommander/redis-commander:latest
+    hostname: redisadmin
+    restart: always
+    ports:
+      - 8092:8081
+    env_file:
+      - .env
+
+volumes:
+  mongo_data: { }
+  local_postgres_data: { }
+  local_postgres_data_backups: { }
+  pgadmin_data: { }
+  static_content: { }
+  media_content: { }

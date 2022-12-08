@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+
+{% block header %}
+    <li><a href="{% url 'tatoo:index_page' %}" class="ms-1 nav-link px-2 link-dark"><b>Home</b></a></li>
+    <li><a style='border-radius: 50px; font-size: 15px;' href="{% url 'tatoo:explore' %}" class="ms-1 nav-link px-2 text-white bg-black"><b>Explore</b></a></li>
+{% endblock %}
+
+{% block content %}
+<main class="ms-3 me-3">
+    <div id="masonry">
+    {% for pin in pins %}
+        <a class="m-2" href="{% url 'tatoo:pin_detail' pin.id %}">
+            <img class="shadow p-3 mb-5 bg-white rounded" height="350"  src="{{ pin.img.image.url }}">
+        </a>
+    {% endfor %}
+    </div>
+</main>
+
+
+{% endblock %}
