@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+from core.tasks import normalize_email_task, generate_data
+
+
+def normalize_email(request):
+    normalize_email_task.delay(filter={"email__endswith": ".com"})
+    return HttpResponse("Task is started")
+
+
+def get_data(request):
+    generate_data.delay()
+    return HttpResponse("Task is started")
